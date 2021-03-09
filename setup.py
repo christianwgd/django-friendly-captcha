@@ -25,7 +25,7 @@ setup(
         'requests'
     ],
     classifiers=[
-        'Development Status :: 4 - beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
