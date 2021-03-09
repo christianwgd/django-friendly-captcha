@@ -1,6 +1,6 @@
 Django Friendly Captcha
 =======================
-.. image:: https://img.shields.io/pypi/v/django-friendly-captcha.svg
+.. image:: https://img.shields.io/pypi/v/django-friendly-captcha
     :target: https://pypi.python.org/pypi/django-friendly-captcha
 
 .. image:: https://img.shields.io/pypi/dm/django-friendly-captcha
