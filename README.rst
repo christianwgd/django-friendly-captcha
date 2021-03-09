@@ -97,6 +97,15 @@ When setting FAIL_SILENT to True it's up to you to handle captcha verification:
 Logging
 #######
 
+If you want to log the results of the captcha verifications you can
+add a logger to your logging configuration:
+
+.. code-block::
+
+    'django.friendly_captcha': {
+        'handlers': ['default'],
+        'level': 'INFO',
+    }
 
 
 Releases
