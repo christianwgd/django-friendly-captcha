@@ -1,0 +1,11 @@
+*.pyc
+docs/_build/
+dist
+build
+*.egg-info
+*.pot
+.DS_store
+
+/envs
+/projects
+.idea
