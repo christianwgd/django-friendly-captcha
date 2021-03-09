@@ -1,9 +1,11 @@
 Django Friendly Captcha
 =======================
 .. image:: https://img.shields.io/pypi/v/django-friendly-captcha.svg
+    :target: https://pypi.python.org/pypi/django-friendly-captcha
 
 .. image:: https://img.shields.io/pypi/dm/django-friendly-captcha
     :alt: PyPI - Downloads
+    :target: https://pypi.python.org/pypi/django-friendly-captcha
 
 Django library for Friendly Capture (https://friendlycaptcha.com).
 
