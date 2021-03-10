@@ -63,8 +63,12 @@ Add the script tags from friendly capture to your forms template
     <script type="module" src="https://unpkg.com/friendly-challenge@0.8.1/widget.module.min.js" async defer></script>
     <script nomodule src="https://unpkg.com/friendly-challenge@0.8.1/widget.min.js" async defer></script>
 
-I thought about adding these static assets as form media assets, but users wouldn't be
-able to choose the desired version. So I decided against for now.
+I thought about adding these static assets as form media assets, but
+users wouldn't be able to choose the desired version. So I decided
+against for now.
+
+If you build up your form from single fields, dont't forget to include
+the captcha form field.
 
 Configuration
 #############
