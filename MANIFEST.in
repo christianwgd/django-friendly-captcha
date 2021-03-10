@@ -1,6 +1,5 @@
 include AUTHORS
 include README.rst
 include LICENSE
-recursive-include docs *
-recursive-include filebrowser/templates *
-recursive-include filebrowser/locale *
+recursive-include friendly_captcha/templates *
+recursive-include friendly_captcha/locale *
