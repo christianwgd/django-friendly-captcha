@@ -8,7 +8,7 @@ Django Friendly Captcha
     :alt: PyPI - Downloads
     :target: https://pypi.python.org/pypi/django-friendly-captcha
 
-Django library for Friendly Capture (https://friendlycaptcha.com).
+Django field/widget for Friendly Capture (https://friendlycaptcha.com).
 
 
 
