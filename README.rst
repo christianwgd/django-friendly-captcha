@@ -8,7 +8,7 @@ Django Friendly Captcha
     :alt: PyPI - Downloads
     :target: https://pypi.python.org/pypi/django-friendly-captcha
 
-Django field/widget for Friendly Capture (https://friendlycaptcha.com).
+Django field/widget for Friendly Captcha (https://friendlycaptcha.com).
 
 
 
@@ -55,7 +55,7 @@ Add the captcha field to your form:
 
         captcha = FrcCaptchaField()
 
-Add the script tags from friendly capture to your forms template
+Add the script tags from Friendly Captcha to your forms template
 (see https://docs.friendlycaptcha.com/#/installation)
 
 .. code-block::
@@ -102,7 +102,7 @@ When setting FAIL_SILENT to True it's up to you to handle captcha verification:
         if captcha_verified:
             # send mail or whatever ...
         else:
-            # capture verification failed, do nothing ...
+            # captcha verification failed, do nothing ...
 
 Logging
 #######
