@@ -104,6 +104,18 @@ When setting FAIL_SILENT to True it's up to you to handle captcha verification:
         else:
             # capture verification failed, do nothing ...
 
+Custom widget attributes
+########################
+
+You can add custom widget attrs to the FrcCaptchaField like in any other
+Django field:
+
+.. code-block::
+    captcha = FrcCaptchaField(widget=FrcCaptchaWidget(attrs={'data-start': 'auto'}))
+
+See https://docs.friendlycaptcha.com/#/widget_api for additional widget attrs.
+The data-lang attr is set from your Django configured language.
+
 Logging
 #######
 
@@ -116,10 +128,3 @@ add a logger to your logging configuration:
         'handlers': ['default'],
         'level': 'INFO',
     }
-
-
-Releases
---------
-
-* django_friendly_captcha 0.1.0 (March 2021): Initial release
-
