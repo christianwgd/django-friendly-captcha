@@ -1,7 +1,13 @@
+Version 0.1.3 (2022-04-22)
+--------------------------
+
+* Fixed: Widget attr sitekey had wrong name (#3)
+
+
 Version 0.1.2 (2022-04-22)
 --------------------------
 
-* Fixed: Widget was missing custom attrs (#3)
+* Fixed: Widget was missing custom attrs (#3) - invalid -
 
 
 Version 0.1.1 (2021-3-10)
