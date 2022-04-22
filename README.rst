@@ -111,6 +111,7 @@ You can add custom widget attrs to the FrcCaptchaField like in any other
 Django field:
 
 .. code-block::
+
     captcha = FrcCaptchaField(widget=FrcCaptchaWidget(attrs={'data-start': 'auto'}))
 
 See https://docs.friendlycaptcha.com/#/widget_api for additional widget attrs.
