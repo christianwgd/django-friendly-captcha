@@ -60,8 +60,8 @@ Add the script tags from Friendly Captcha to your forms template
 
 .. code-block::
 
-    <script type="module" src="https://unpkg.com/friendly-challenge@0.8.1/widget.module.min.js" async defer></script>
-    <script nomodule src="https://unpkg.com/friendly-challenge@0.8.1/widget.min.js" async defer></script>
+    <script type="module" src="https://unpkg.com/friendly-challenge@0.9.4/widget.module.min.js" async defer></script>
+    <script nomodule src="https://unpkg.com/friendly-challenge@0.9.4/widget.min.js" async defer></script>
 
 I thought about adding these static assets as form media assets, but
 users wouldn't be able to choose the desired version. So I decided

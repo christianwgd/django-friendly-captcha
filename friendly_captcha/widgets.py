@@ -10,6 +10,7 @@ class FrcCaptchaWidget(Widget):
     def render(self, name, value, attrs=None, renderer=None):
         attrs['data-lang'] = translation.get_language()
         attrs['data-sitekey'] = getattr(settings, 'FRC_CAPTCHA_SITE_KEY', None)
+        attrs['data-solution-field-name'] = name
         attrs['class'] = 'frc-captcha'
         final_attrs = self.build_attrs(attrs)
         return format_html('<div {}></div>', flatatt(final_attrs))

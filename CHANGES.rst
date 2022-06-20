@@ -1,3 +1,10 @@
+Version 0.1.4 (2022-06-23)
+--------------------------
+
+* Fixed: Missing data-solution-field-name in widget (#4)
+* Updated: Friendly captcha js version in README
+
+
 Version 0.1.3 (2022-04-22)
 --------------------------
 
