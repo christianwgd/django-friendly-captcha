@@ -1,3 +1,10 @@
+Version 0.1.5 (2022-11-04)
+--------------------------
+
+* Updated: Update from legacy endpoint
+  FriendlyCaptcha updated it's api endpoint: https://docs.friendlycaptcha.com/#/legacy_endpoint
+
+
 Version 0.1.4 (2022-06-23)
 --------------------------
 
