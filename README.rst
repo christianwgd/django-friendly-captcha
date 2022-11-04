@@ -83,7 +83,7 @@ sitekey and captcha secret.
 
 .. code-block::
 
-    FRC_CAPTCHA_VERIFICATION_URL = 'https://friendlycaptcha.com/api/v1/siteverify'
+    FRC_CAPTCHA_VERIFICATION_URL = 'https://api.friendlycaptcha.com/api/v1/siteverify'
 
 In default the form will fail with an error ('Captcha test failed'). You can change
 this behaviour by setting FRC_CAPTCHA_FAIL_SILENT to True.
