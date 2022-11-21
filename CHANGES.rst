@@ -1,3 +1,10 @@
+Version 0.1.6 (2022-11-21)
+--------------------------
+
+* Updated: Update docs to point to latest js and css version
+  See also: https://docs.friendlycaptcha.com/#/legacy_endpoint
+
+
 Version 0.1.5 (2022-11-04)
 --------------------------
 

@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name='django-friendly-captcha',
-    version='0.1.5',
+    version='0.1.6',
     description='Django library for friendly captcha',
     long_description=read('README.rst'),
     url='https://github.com/christianwgd/django-friendly-captcha',
