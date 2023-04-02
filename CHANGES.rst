@@ -1,3 +1,11 @@
+Version 0.1.7 (2023-04-02)
+--------------------------
+
+* Changed: As of version 0.1.7 the friendly captcha javascript assets are
+  included in the widget, so no need to include them in the templates.
+  For more information see the docs in the README.rst.
+
+
 Version 0.1.6 (2022-11-21)
 --------------------------
 
