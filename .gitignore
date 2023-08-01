@@ -9,3 +9,4 @@ build
 /envs
 /projects
 .idea
+.ruff_cache

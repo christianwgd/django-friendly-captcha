@@ -1,3 +1,11 @@
+Version 0.1.8 (2023-08-01)
+--------------------------
+
+* Fixed: A programming error prevented the complete loading of the
+  widget javascript resources (#7)
+* Updated: Update the default javascript version to 0.9.12
+
+
 Version 0.1.7 (2023-04-02)
 --------------------------
 
