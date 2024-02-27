@@ -12,7 +12,7 @@
       "matchUpdateTypes": ["patch", "pin", "digest"],
       "automerge": false
     }
-  ]
+  ],
   "customManagers": [
     {
       "customType": "regex",
