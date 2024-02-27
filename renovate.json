@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+  ],
+  "labels": ["dependency"],
+  "platformAutomerge": true,
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "automerge": true,
+      "automergeType": "branch",
+      "additionalBranchPrefix": "{{parentDir}}-"
+    },
+  ]
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["widgets.py"],
+      "matchStrings": ["(?<=friendly-challenge@)<currentValue>(?=/)"],
+      "depNameTemplate": "unpkg",
+      "versioningTemplate": "semver-coerced",
+      "datasourceTemplate": "custom.unpkg"
+    }
+  ],
+  "customDatasources": {
+    "unpkg": {
+      "defaultRegistryUrlTemplate": "https://unpkg.com/friendly-challenge@latest/package.json",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $$.(version),\"sourceUrl\": $$.(repository),\"changelogUrl\":$join([\"https://docs.friendlycaptcha.com/#/changelog?id=_/\",version)}],\"sourceUrl\": $$.(repository),\"changelogUrl\": \"https://docs.friendlycaptcha.com/#/changelog\",\"homepage\": \"https://friendlycaptcha.com/\"}"
+      ]
+    }
+  }
+}
