@@ -17,7 +17,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["widgets.py"],
+      "fileMatch": ["^friendly_captcha\/widgets.py$"],
       "matchStrings": ["(?<=friendly-challenge@)<currentValue>(?=/)"],
       "depNameTemplate": "unpkg",
       "versioningTemplate": "semver-coerced",
