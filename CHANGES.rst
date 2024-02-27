@@ -1,3 +1,12 @@
+Version 0.1.9 (2024-02-27)
+--------------------------
+
+* Updated: Update the default javascript version to 0.9.14
+* New: Added renova dependecy bot (Thanks to kimdre_).
+
+.. _kimdre: https://github.com/kimdre
+
+
 Version 0.1.8 (2023-08-01)
 --------------------------
 
