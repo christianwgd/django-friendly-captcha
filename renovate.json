@@ -8,9 +8,7 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["patch", "pin", "digest"],
-      "automerge": true,
-      "automergeType": "branch",
-      "additionalBranchPrefix": "{{parentDir}}-"
+      "automerge": false
     },
   ]
   "customManagers": [
