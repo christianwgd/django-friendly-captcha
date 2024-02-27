@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "includeForks": true,
   "labels": ["dependency"],
   "platformAutomerge": true,
   "packageRules": [
