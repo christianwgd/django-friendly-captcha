@@ -3,9 +3,9 @@
   "extends": [
     "config:recommended"
   ],
-  "forkProcessing": "enabled",
   "labels": ["dependency"],
   "platformAutomerge": true,
+  "forkProcessing": "enabled",
   "packageRules": [
     {
       "matchUpdateTypes": ["patch", "pin", "digest"],
