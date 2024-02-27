@@ -8,7 +8,6 @@
   "dependencyDashboardTitle": "Dependency Dashboard",
   "platformAutomerge": true,
   "forkProcessing": "enabled",
-  "includeForks": true,
   "packageRules": [
     {
       "matchUpdateTypes": ["patch", "pin", "digest"],
