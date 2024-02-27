@@ -11,7 +11,7 @@
     {
       "matchUpdateTypes": ["patch", "pin", "digest"],
       "automerge": false
-    },
+    }
   ]
   "customManagers": [
     {
