@@ -17,20 +17,10 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^friendly_captcha\/widgets.py$"],
-      "matchStrings": ["(?<=friendly-challenge@)<currentValue>(?=/)"],
-      "depNameTemplate": "unpkg",
-      "versioningTemplate": "semver-coerced",
-      "datasourceTemplate": "custom.unpkg"
+      "fileMatch": ["(^|/)friendly_captcha/widgets.py"],
+      "matchStrings": ["(?<=friendly-challenge@)(?<currentValue>.*?)(?=/)"],
+      "depNameTemplate": "friendly-challenge",
+      "datasourceTemplate": "npm"
     }
   ],
-  "customDatasources": {
-    "unpkg": {
-      "defaultRegistryUrlTemplate": "https://unpkg.com/friendly-challenge@latest/package.json",
-      "format": "json",
-      "transformTemplates": [
-        "{\"releases\":[{\"version\": $$.(version),\"sourceUrl\": $$.(repository),\"changelogUrl\":$join([\"https://docs.friendlycaptcha.com/#/changelog?id=_/\",version)}],\"sourceUrl\": $$.(repository),\"changelogUrl\": \"https://docs.friendlycaptcha.com/#/changelog\",\"homepage\": \"https://friendlycaptcha.com/\"}"
-      ]
-    }
-  }
 }
