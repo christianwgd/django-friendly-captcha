@@ -20,5 +20,5 @@
       "matchStrings": ["(?<=com/)(?<depName>.*?)@(?<currentValue>.*?)(?=/)"],
       "datasourceTemplate": "npm"
     }
-  ],
+  ]
 }
