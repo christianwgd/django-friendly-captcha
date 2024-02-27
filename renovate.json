@@ -4,6 +4,8 @@
     "config:recommended",
     ":semanticCommits"
   ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Dependency Dashboard",
   "platformAutomerge": true,
   "forkProcessing": "enabled",
   "includeForks": true,
