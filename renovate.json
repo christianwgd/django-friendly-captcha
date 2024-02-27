@@ -1,11 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "labels": ["dependency"],
   "platformAutomerge": true,
   "forkProcessing": "enabled",
+  "includeForks": true,
   "packageRules": [
     {
       "matchUpdateTypes": ["patch", "pin", "digest"],
@@ -15,7 +16,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["(^|/)friendly_captcha\\/widgets.py$"],
+      "fileMatch": ["(^|/)friendly_captcha/widgets.py$"],
       "matchStrings": ["(?<=com/)(?<depName>.*?)@(?<currentValue>.*?)(?=/)"],
       "datasourceTemplate": "npm"
     }
