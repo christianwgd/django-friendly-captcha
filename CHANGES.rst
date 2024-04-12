@@ -1,3 +1,10 @@
+Version 0.1.11 (2024-04-12)
+--------------------------
+
+* New: Add a new settings option FRC_CAPTCHA_MOCKED_VALUE for
+  testing purposes.
+
+
 Version 0.1.10 (2024-03-29)
 --------------------------
 

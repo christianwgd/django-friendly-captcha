@@ -19,6 +19,13 @@ class FrcCaptchaField(forms.CharField):
         super(FrcCaptchaField, self).__init__(*args, **kwargs)
 
     def clean(self, value):
+        # Mock the response of verification for testing purposes
+        mocked_value = getattr(settings, 'FRC_CAPTCHA_MOCKED_VALUE', None)
+        print('mocked value', mocked_value)
+        if mocked_value is not None:
+            logger.info('Captcha mocked value set to %s', mocked_value)
+            return mocked_value
+
         clean_value = False
         # handle captcha field
         captcha_secret = getattr(settings, 'FRC_CAPTCHA_SECRET', None)

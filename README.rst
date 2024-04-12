@@ -112,6 +112,15 @@ When setting FAIL_SILENT to True it's up to you to handle captcha verification:
         else:
             # captcha verification failed, do nothing ...
 
+As of version 0.1.11 there's a new settings option to get a mocked
+value from the captcha verification. You can set FRC_CAPTCHA_MOCKED_VALUE
+to True or False, depending on the vaule you need for testing.
+The default value is unset which equals to None.
+
+.. code-block::
+
+    FRC_CAPTCHA_MOCKED_VALUE = None|False|True
+
 Custom widget attributes
 ########################
 
