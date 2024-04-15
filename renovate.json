@@ -2,7 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":semanticCommits"
+    ":semanticCommits",
+    ":dependencyDashboard"
   ],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Dependency Dashboard",
