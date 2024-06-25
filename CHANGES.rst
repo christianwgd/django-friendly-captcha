@@ -1,3 +1,9 @@
+Version 0.1.12 (2024-06-25)
+--------------------------
+
+* Updated: Update the default javascript version to 0.9.16
+
+
 Version 0.1.11 (2024-04-12)
 --------------------------
 
