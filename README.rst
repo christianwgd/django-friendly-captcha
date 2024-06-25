@@ -57,7 +57,7 @@ Add the captcha field to your form:
 
 As of version 0.1.7 the javascript static assets are included in
 the widget, so there is no need to do that in your project templates.
-Version 0.1.10 includes friendly captcha version 0.9.15 javascript files.
+Version 0.1.10 includes friendly captcha version 0.9.16 javascript files.
 If you need a different version you can set these by providing
 them in your settings:
 
