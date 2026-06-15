@@ -21,6 +21,8 @@ class FrcCaptchaWidget(Widget):
         )
 
     def render(self, name, value, attrs=None, renderer=None):
+        if attrs is None:
+            attrs = {}
         attrs['data-lang'] = translation.get_language()
         attrs['data-sitekey'] = self.site_key
         attrs['data-solution-field-name'] = name
