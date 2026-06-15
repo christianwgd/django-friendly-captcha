@@ -1,3 +1,9 @@
+Version 0.1.14 (2026-06-15)
+--------------------------
+
+* Updated: Update the default javascript version to 0.9.20
++ Updated: Added basic tests to library
+
 Version 0.1.13 (2025-08-11)
 --------------------------
 
