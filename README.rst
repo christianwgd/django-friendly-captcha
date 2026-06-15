@@ -8,6 +8,13 @@ Django Friendly Captcha
     :alt: PyPI - Downloads
     :target: https://pypi.python.org/pypi/django-friendly-captcha
 
+.. image:: https://codecov.io/gh/christianwgd/django-friendly-captcha/graph/badge.svg?token=CJ39YW793C
+    :target: https://codecov.io/gh/christianwgd/django-friendly-captcha
+
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Ruff
+
 Django field/widget for Friendly Captcha (https://friendlycaptcha.com).
 
 
