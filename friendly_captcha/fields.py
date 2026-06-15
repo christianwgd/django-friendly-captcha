@@ -36,22 +36,20 @@ class FrcCaptchaField(forms.CharField):
                 'secret': captcha_secret,
                 'sitekey': captcha_sitekey
             }
-            captcha_response = requests.post(captcha_verification_url, data=payload)
+            captcha_response = requests.post(captcha_verification_url, data=payload, timeout=20)
             if captcha_response.status_code == 200:
                 validation = captcha_response.json()
                 if not validation['success']:
-                    logger.info('Captcha failed validation {}'.format(captcha_response.json()))
+                    logger.info('Captcha failed validation %s' ,captcha_response.json())
                 else:
                     logger.info('Captcha validation success')
                     clean_value = True
             else:
-                logger.info('Captcha failed validation {}'.format(captcha_response.json()))
+                logger.info('Captcha failed validation %s', captcha_response.json())
 
         if clean_value:
             return True
-        else:
-            fail_silent = getattr(settings, 'FRC_CAPTCHA_FAIL_SILENT', False)
-            if fail_silent:
-                return False
-            else:
-                raise ValidationError(_('Captcha test failed'), code='bot_detected')
+        fail_silent = getattr(settings, 'FRC_CAPTCHA_FAIL_SILENT', False)
+        if fail_silent:
+            return False
+        raise ValidationError(_('Captcha test failed'), code='bot_detected')
