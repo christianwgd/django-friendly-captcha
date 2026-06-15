@@ -1,4 +1,5 @@
 django
+requests
 pytest
 pytest-cov
 ruff
