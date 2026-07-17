@@ -47,9 +47,6 @@ def get_verification_headers():
         return {}
 
     api_key = getattr(settings, 'FRC_CAPTCHA_API_KEY', None)
-    if api_key is None:
-        api_key = getattr(settings, 'FRC_CAPTCHA_SECRET', None)
-
     return {'X-API-Key': api_key} if api_key else {}
 
 

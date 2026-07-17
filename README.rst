@@ -96,8 +96,9 @@ sitekey and captcha secret.
     FRC_CAPTCHA_SECRET = '<yourCaptchaSecret'
     FRC_CAPTCHA_SITE_KEY = '<yourCaptchaSiteKey>'
 
-For Friendly Captcha v2, use your API key instead of the old secret and point the
-verification URL at the v2 endpoint:
+For Friendly Captcha v2, the backend verification uses an API key. The old
+`secret` field is no longer used for v2 verification. Point the verification URL
+at the v2 endpoint:
 
 .. code-block::
 
@@ -112,6 +113,10 @@ You can also set the version explicitly:
 
 If `FRC_CAPTCHA_VERSION` is omitted, the package switches to v2 automatically
 when it sees a v2 verification URL or an API key.
+
+The Risk Intelligence feature mentioned in the v2 docs is separate from captcha
+verification. It adds extra risk data to the successful siteverify response when
+enabled, but it does not replace the API key needed for backend verification.
 
 In default the form will fail with an error ('Captcha test failed'). You can change
 this behaviour by setting FRC_CAPTCHA_FAIL_SILENT to True.

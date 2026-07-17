@@ -236,3 +236,31 @@ class FrcCaptchaFieldTest(TestCase):
         self.assertEqual(mock_post.call_args.kwargs['data']['response'], 'some-value')
         self.assertEqual(mock_post.call_args.kwargs['data']['sitekey'], 'test-site-key')
         self.assertEqual(mock_post.call_args.kwargs['headers']['X-API-Key'], 'test-api-key')
+
+    @override_settings(
+        FRC_CAPTCHA_SITE_KEY='test-site-key',
+        FRC_CAPTCHA_VERIFICATION_URL='https://global.frcapi.com/api/v2/captcha/siteverify',
+    )
+    def test_clean_v2_requires_api_key(self):
+        field = FrcCaptchaField()
+        with pytest.raises(ValidationError):
+            field.clean('some-value')
+
+    @patch('friendly_captcha.fields.requests.post')
+    @override_settings(
+        FRC_CAPTCHA_API_KEY='test-api-key',
+        FRC_CAPTCHA_VERIFICATION_URL='https://global.frcapi.com/api/v2/captcha/siteverify',
+    )
+    def test_clean_verification_success_v2_without_sitekey(self, mock_post):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {'success': True}
+        mock_post.return_value = mock_response
+
+        field = FrcCaptchaField()
+        result = field.clean('some-value')
+        self.assertTrue(result)
+        mock_post.assert_called_once()
+        self.assertEqual(mock_post.call_args.kwargs['data']['response'], 'some-value')
+        self.assertNotIn('sitekey', mock_post.call_args.kwargs['data'])
+        self.assertEqual(mock_post.call_args.kwargs['headers']['X-API-Key'], 'test-api-key')

@@ -38,14 +38,15 @@ class FrcCaptchaField(forms.CharField):
         captcha_secret = getattr(settings, 'FRC_CAPTCHA_SECRET', None)
         captcha_api_key = getattr(settings, 'FRC_CAPTCHA_API_KEY', None)
         if captcha_version == 2:
-            captcha_ready = bool(captcha_sitekey and captcha_verification_url and (captcha_api_key or captcha_secret))
+            captcha_ready = bool(captcha_verification_url and captcha_api_key)
         else:
             captcha_ready = bool(captcha_sitekey and captcha_secret and captcha_verification_url)
 
         if captcha_ready:
             payload = get_verification_payload(value)
             if captcha_version == 2:
-                payload['sitekey'] = captcha_sitekey
+                if captcha_sitekey:
+                    payload['sitekey'] = captcha_sitekey
                 headers = get_verification_headers()
             else:
                 payload['secret'] = captcha_secret
