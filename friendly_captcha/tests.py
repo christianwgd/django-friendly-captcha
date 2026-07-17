@@ -3,6 +3,12 @@ import pytest
 from django.test import TestCase, override_settings
 from django.core.exceptions import ValidationError
 from unittest.mock import patch, MagicMock
+from friendly_captcha.utils import (
+    get_captcha_version,
+    get_verification_url,
+    get_verification_headers,
+    get_widget_script_urls,
+)
 from friendly_captcha.fields import FrcCaptchaField
 from friendly_captcha.widgets import FrcCaptchaWidget
 from django.conf import settings
@@ -20,6 +26,80 @@ settings.configure(
     ],
 )
 django.setup()
+
+
+class FrcCaptchaUtilsTest(TestCase):
+
+    @override_settings(
+        FRC_CAPTCHA_API_KEY='some-api-key', FRC_CAPTCHA_SECRET='some-secret'  # noqa: S106
+    )
+    def test_get_captcha_version_default(self):
+        self.assertEqual(get_captcha_version(), 2)
+
+    @override_settings(FRC_CAPTCHA_VERSION='1')
+    def test_get_captcha_version_v1(self):
+        self.assertEqual(get_captcha_version(), 1)
+
+    @override_settings(FRC_CAPTCHA_VERSION=2)
+    def test_get_captcha_version_v2(self):
+        self.assertEqual(get_captcha_version(), 2)
+
+    def test_get_verification_url_default(self):
+        self.assertEqual(get_verification_url(), 'https://api.friendlycaptcha.com/api/v1/siteverify')
+
+    @override_settings(FRC_CAPTCHA_VERIFICATION_URL='https://api.friendlycaptcha.com/api/v1/siteverify')
+    def test_get_verification_url_v1(self):
+        self.assertEqual(get_verification_url(), 'https://api.friendlycaptcha.com/api/v1/siteverify')
+
+    @override_settings(FRC_CAPTCHA_VERSION=2)
+    def test_get_verification_url_v2(self):
+        self.assertEqual(get_verification_url(), 'https://global.frcapi.com/api/v2/captcha/siteverify')
+
+    def test_get_verification_headers_default(self):
+        self.assertEqual(get_verification_headers(), {})
+
+    @override_settings(FRC_CAPTCHA_VERSION=2)
+    def test_get_verification_headers_v2(self):
+        self.assertEqual(get_verification_headers(), {})
+
+    @override_settings(
+        FRC_CAPTCHA_API_KEY='some-api-key', FRC_CAPTCHA_SECRET='some-secret'  # noqa: S106
+    )
+    def test_get_verification_headers_v1(self):
+        self.assertEqual(get_verification_headers(), {'X-API-Key': 'some-api-key'})
+
+    def test_widget_script_urls_default(self):
+        self.assertEqual(
+            get_widget_script_urls(),
+            (
+                'https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.20/widget.module.min.js',
+                'https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.20/widget.min.js'
+            )
+        )
+
+    @override_settings(
+        FRC_WIDGET_MODULE_JS='https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.min.js',
+        FRC_WIDGET_JS='https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js',
+    )
+    def test_widget_script_urls_v1(self):
+        self.assertEqual(
+            get_widget_script_urls(),
+            (
+                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.min.js',
+                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js'
+            )
+        )
+
+    @override_settings(FRC_CAPTCHA_VERSION=2)
+    def test_widget_script_urls_v2(self):
+        self.assertEqual(
+            get_widget_script_urls(),
+            (
+                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.min.js',
+                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js'
+            )
+        )
+
 
 
 class FrcCaptchaWidgetTest(TestCase):
