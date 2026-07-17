@@ -1,3 +1,8 @@
+Version 0.2.0 (2026-07-17)
+--------------------------
+
+* New: Friendly-Captcha Version 2 compatability
+
 Version 0.1.14 (2026-06-15)
 --------------------------
 
