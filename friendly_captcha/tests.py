@@ -101,7 +101,6 @@ class FrcCaptchaUtilsTest(TestCase):
         )
 
 
-
 class FrcCaptchaWidgetTest(TestCase):
     @override_settings(FRC_CAPTCHA_SITE_KEY='test-site-key', LANGUAGE_CODE='en')
     def test_render(self):
