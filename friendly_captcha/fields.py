@@ -6,6 +6,12 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from friendly_captcha.utils import (
+    get_captcha_version,
+    get_verification_headers,
+    get_verification_payload,
+    get_verification_url,
+)
 from friendly_captcha.widgets import FrcCaptchaWidget
 
 logger = getLogger('django.friendly_captcha')
@@ -26,26 +32,41 @@ class FrcCaptchaField(forms.CharField):
             return mocked_value
 
         clean_value = False
-        # handle captcha field
-        captcha_secret = getattr(settings, 'FRC_CAPTCHA_SECRET', None)
         captcha_sitekey = getattr(settings, 'FRC_CAPTCHA_SITE_KEY', None)
-        captcha_verification_url = getattr(settings, 'FRC_CAPTCHA_VERIFICATION_URL', False)
-        if captcha_sitekey and captcha_secret and captcha_verification_url:
-            payload = {
-                'solution': value,
-                'secret': captcha_secret,
-                'sitekey': captcha_sitekey
-            }
-            captcha_response = requests.post(captcha_verification_url, data=payload, timeout=20)
+        captcha_verification_url = get_verification_url()
+        captcha_version = get_captcha_version()
+        captcha_secret = getattr(settings, 'FRC_CAPTCHA_SECRET', None)
+        captcha_api_key = getattr(settings, 'FRC_CAPTCHA_API_KEY', None)
+        if captcha_version == 2:
+            captcha_ready = bool(captcha_sitekey and captcha_verification_url and (captcha_api_key or captcha_secret))
+        else:
+            captcha_ready = bool(captcha_sitekey and captcha_secret and captcha_verification_url)
+
+        if captcha_ready:
+            payload = get_verification_payload(value)
+            if captcha_version == 2:
+                payload['sitekey'] = captcha_sitekey
+                headers = get_verification_headers()
+            else:
+                payload['secret'] = captcha_secret
+                payload['sitekey'] = captcha_sitekey
+                headers = {}
+
+            captcha_response = requests.post(
+                captcha_verification_url,
+                data=payload,
+                headers=headers,
+                timeout=20,
+            )
             if captcha_response.status_code == 200:
                 validation = captcha_response.json()
-                if not validation['success']:
-                    logger.info('Captcha failed validation %s' ,captcha_response.json())
+                if not validation.get('success'):
+                    logger.info('Captcha failed validation %s', validation)
                 else:
                     logger.info('Captcha validation success')
                     clean_value = True
             else:
-                logger.info('Captcha failed validation %s', captcha_response.json())
+                logger.info('Captcha failed validation %s', captcha_response.text)
 
         if clean_value:
             return True

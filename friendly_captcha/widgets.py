@@ -5,27 +5,22 @@ from django.utils.html import format_html
 from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
 
+from friendly_captcha.utils import get_widget_field_name_attr, get_widget_language_attr, get_widget_script_urls
+
 
 class FrcCaptchaWidget(Widget):
 
     def __init__(self):
         super().__init__()
         self.site_key = getattr(settings, 'FRC_CAPTCHA_SITE_KEY', None)
-        self.frc_widget_module_js = getattr(
-            settings, 'FRC_WIDGET_MODULE_JS',
-            'https://unpkg.com/friendly-challenge@0.9.20/widget.module.min.js',
-        )
-        self.frc_widget_js = getattr(
-            settings, 'FRC_WIDGET_JS',
-            'https://unpkg.com/friendly-challenge@0.9.20/widget.min.js'
-        )
+        self.frc_widget_module_js, self.frc_widget_js = get_widget_script_urls()
 
     def render(self, name, value, attrs=None, renderer=None):
         if attrs is None:
             attrs = {}
-        attrs['data-lang'] = translation.get_language()
+        attrs[get_widget_language_attr()] = translation.get_language()
         attrs['data-sitekey'] = self.site_key
-        attrs['data-solution-field-name'] = name
+        attrs[get_widget_field_name_attr()] = name
         attrs['class'] = 'frc-captcha'
         final_attrs = self.build_attrs(attrs)
         frc_js = mark_safe(

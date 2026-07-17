@@ -96,9 +96,22 @@ sitekey and captcha secret.
     FRC_CAPTCHA_SECRET = '<yourCaptchaSecret'
     FRC_CAPTCHA_SITE_KEY = '<yourCaptchaSiteKey>'
 
+For Friendly Captcha v2, use your API key instead of the old secret and point the
+verification URL at the v2 endpoint:
+
 .. code-block::
 
-    FRC_CAPTCHA_VERIFICATION_URL = 'https://api.friendlycaptcha.com/api/v1/siteverify'
+    FRC_CAPTCHA_API_KEY = '<yourCaptchaApiKey>'
+    FRC_CAPTCHA_VERIFICATION_URL = 'https://global.frcapi.com/api/v2/captcha/siteverify'
+
+You can also set the version explicitly:
+
+.. code-block::
+
+    FRC_CAPTCHA_VERSION = 2
+
+If `FRC_CAPTCHA_VERSION` is omitted, the package switches to v2 automatically
+when it sees a v2 verification URL or an API key.
 
 In default the form will fail with an error ('Captcha test failed'). You can change
 this behaviour by setting FRC_CAPTCHA_FAIL_SILENT to True.
