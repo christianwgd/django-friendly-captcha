@@ -16,7 +16,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["(^|/)friendly_captcha/widgets.py$"],
+      "managerFilePatterns": [
+        "/(^|/)friendly_captcha/widgets.py$/"
+      ],
       "matchStrings": [".*com\\/(?<depName>.*?)\\@(?<currentValue>.*)\\/"],
       "datasourceTemplate": "npm"
     }
