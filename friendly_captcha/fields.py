@@ -74,11 +74,6 @@ class FrcCaptchaField(forms.CharField):
                         captcha_response.status_code, captcha_response.text
                     )
                     clean_value = True
-                else:
-                    logger.info(
-                        'Captcha failed validation (code %s) %s',
-                        captcha_response.status_code, captcha_response.text
-                    )
 
         if clean_value:
             return True
