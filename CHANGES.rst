@@ -2,6 +2,7 @@ Version 0.2.0 (2026-07-17)
 --------------------------
 
 * New: Friendly-Captcha Version 2 compatability
+* New: Added a setting for handling unverified responses (http code != 200)
 
 Version 0.1.14 (2026-06-15)
 --------------------------

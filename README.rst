@@ -137,9 +137,20 @@ When setting FAIL_SILENT to True it's up to you to handle captcha verification:
         else:
             # captcha verification failed, do nothing ...
 
+If the captcha response returns with some http code other than 200, that doesn't
+mean the captcha result is invalid, it simply wasn't able ot resolve the puzzle
+(because i.e. the friendly-captcha server is down or there are network problems).
+You can specify how to deal with those responses by setting
+
+.. code-block::
+
+    FRC_CAPTCHA_ACCEPT_UNVERIFIED = False|True
+
+FRC_CAPTCHA_ACCEPT_UNVERIFIED defaults to False.
+
 As of version 0.1.11 there's a new settings option to get a mocked
 value from the captcha verification. You can set FRC_CAPTCHA_MOCKED_VALUE
-to True or False, depending on the vaule you need for testing.
+to True or False, depending on the value you need for testing.
 The default value is unset which equals to None.
 
 .. code-block::

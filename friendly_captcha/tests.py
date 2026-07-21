@@ -162,6 +162,28 @@ class FrcCaptchaFieldTest(TestCase):
         result = field.clean('some-value')
         self.assertTrue(result)
 
+    @override_settings(
+        FRC_CAPTCHA_ACCEPT_UNVERIFIED=True,
+        FRC_CAPTCHA_VERIFICATION_URL='https://example.com/verify',
+        FRC_CAPTCHA_SITE_KEY='test-site-key',
+        FRC_CAPTCHA_SECRET='some-secret',  # noqa: S106
+    )
+    def test_clean_accept_unverified_v1(self):
+        field = FrcCaptchaField()
+        result = field.clean('some-value')
+        self.assertTrue(result)
+
+    @override_settings(
+        FRC_CAPTCHA_ACCEPT_UNVERIFIED=True,
+        FRC_CAPTCHA_VERIFICATION_URL='https://example.com/verify',
+        FRC_CAPTCHA_SITE_KEY='test-site-key',
+        FRC_CAPTCHA_API_KEY='test-api-key',
+    )
+    def test_clean_accept_unverified_v2(self):
+        field = FrcCaptchaField()
+        result = field.clean('some-value')
+        self.assertTrue(result)
+
     @patch('friendly_captcha.fields.requests.post')
     @override_settings(
         FRC_CAPTCHA_SECRET='test-secret',  # noqa: S106 Possible hardcoded password

@@ -66,8 +66,19 @@ class FrcCaptchaField(forms.CharField):
                 else:
                     logger.info('Captcha validation success')
                     clean_value = True
-            else:
-                logger.info('Captcha failed validation %s', captcha_response.text)
+            else:  # Unverified response
+                accept_unverified = getattr(settings, 'FRC_CAPTCHA_ACCEPT_UNVERIFIED', False)
+                if accept_unverified:
+                    logger.info(
+                        'Captcha could not be verified, accepting unverified response (code %s) %s',
+                        captcha_response.status_code, captcha_response.text
+                    )
+                    clean_value = True
+                else:
+                    logger.info(
+                        'Captcha failed validation (code %s) %s',
+                        captcha_response.status_code, captcha_response.text
+                    )
 
         if clean_value:
             return True
