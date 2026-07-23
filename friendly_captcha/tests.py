@@ -4,9 +4,10 @@ from django.test import TestCase, override_settings
 from django.core.exceptions import ValidationError
 from unittest.mock import patch, MagicMock
 from friendly_captcha.utils import (
+    get_captcha_endpoint,
     get_captcha_version,
+    get_start_mode,
     get_verification_url,
-    get_verification_headers,
     get_widget_script_urls,
 )
 from friendly_captcha.fields import FrcCaptchaField
@@ -30,11 +31,9 @@ django.setup()
 
 class FrcCaptchaUtilsTest(TestCase):
 
-    @override_settings(
-        FRC_CAPTCHA_API_KEY='some-api-key', FRC_CAPTCHA_SECRET='some-secret'  # noqa: S106
-    )
+    @override_settings()
     def test_get_captcha_version_default(self):
-        self.assertEqual(get_captcha_version(), 2)
+        self.assertEqual(get_captcha_version(), 1)
 
     @override_settings(FRC_CAPTCHA_VERSION='1')
     def test_get_captcha_version_v1(self):
@@ -44,30 +43,35 @@ class FrcCaptchaUtilsTest(TestCase):
     def test_get_captcha_version_v2(self):
         self.assertEqual(get_captcha_version(), 2)
 
-    def test_get_verification_url_default(self):
-        self.assertEqual(get_verification_url(), 'https://api.friendlycaptcha.com/api/v1/siteverify')
+    @override_settings()
+    def test_get_captcha_endpoint_default(self):
+        self.assertEqual(get_captcha_endpoint(), 'https://api.friendlycaptcha.com/api/v1/puzzle')
 
-    @override_settings(FRC_CAPTCHA_VERIFICATION_URL='https://api.friendlycaptcha.com/api/v1/siteverify')
-    def test_get_verification_url_v1(self):
+    @override_settings(FRC_CAPTCHA_VERSION=2, FRC_CAPTCHA_ENDPOINT='eu')
+    def test_get_captcha_endpoint_eu(self):
+        self.assertEqual(get_captcha_endpoint(), 'eu')
+
+    @override_settings()
+    def test_get_verification_url_default(self):
         self.assertEqual(get_verification_url(), 'https://api.friendlycaptcha.com/api/v1/siteverify')
 
     @override_settings(FRC_CAPTCHA_VERSION=2)
     def test_get_verification_url_v2(self):
         self.assertEqual(get_verification_url(), 'https://global.frcapi.com/api/v2/captcha/siteverify')
 
-    def test_get_verification_headers_default(self):
-        self.assertEqual(get_verification_headers(), {})
+    @override_settings(FRC_CAPTCHA_VERSION=2, FRC_CAPTCHA_ENDPOINT='eu')
+    def test_get_verification_url_v2_eu(self):
+        self.assertEqual(get_verification_url(), 'https://eu.frcapi.com/api/v2/captcha/siteverify')
 
-    @override_settings(FRC_CAPTCHA_VERSION=2)
-    def test_get_verification_headers_v2(self):
-        self.assertEqual(get_verification_headers(), {})
+    @override_settings()
+    def test_get_start_mode_default(self):
+        self.assertEqual(get_start_mode(), 'focus')
 
-    @override_settings(
-        FRC_CAPTCHA_API_KEY='some-api-key', FRC_CAPTCHA_SECRET='some-secret'  # noqa: S106
-    )
-    def test_get_verification_headers_v1(self):
-        self.assertEqual(get_verification_headers(), {'X-API-Key': 'some-api-key'})
+    @override_settings(FRC_CAPTCHA_START_MODE='none')
+    def test_get_start_mode_none(self):
+        self.assertEqual(get_start_mode(), 'none')
 
+    @override_settings()
     def test_widget_script_urls_default(self):
         self.assertEqual(
             get_widget_script_urls(),
@@ -81,7 +85,7 @@ class FrcCaptchaUtilsTest(TestCase):
         FRC_WIDGET_MODULE_JS='https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.min.js',
         FRC_WIDGET_JS='https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js',
     )
-    def test_widget_script_urls_v1(self):
+    def test_widget_script_urls_override(self):
         self.assertEqual(
             get_widget_script_urls(),
             (
@@ -128,9 +132,9 @@ class FrcCaptchaWidgetTest(TestCase):
 
 class FrcCaptchaWidgetV2Test(TestCase):
     @override_settings(
+        FRC_CAPTCHA_VERSION=2,
         FRC_CAPTCHA_SITE_KEY='test-site-key',
         FRC_CAPTCHA_API_KEY='test-api-key',
-        FRC_CAPTCHA_VERIFICATION_URL='https://global.frcapi.com/api/v2/captcha/siteverify',
         LANGUAGE_CODE='en',
     )
     def test_render_v2(self):
@@ -164,18 +168,7 @@ class FrcCaptchaFieldTest(TestCase):
 
     @override_settings(
         FRC_CAPTCHA_ACCEPT_UNVERIFIED=True,
-        FRC_CAPTCHA_VERIFICATION_URL='https://example.com/verify',
-        FRC_CAPTCHA_SITE_KEY='test-site-key',
-        FRC_CAPTCHA_SECRET='some-secret',  # noqa: S106
-    )
-    def test_clean_accept_unverified_v1(self):
-        field = FrcCaptchaField()
-        result = field.clean('some-value')
-        self.assertTrue(result)
-
-    @override_settings(
-        FRC_CAPTCHA_ACCEPT_UNVERIFIED=True,
-        FRC_CAPTCHA_VERIFICATION_URL='https://example.com/verify',
+        FRC_CAPTCHA_VERSION=2,
         FRC_CAPTCHA_SITE_KEY='test-site-key',
         FRC_CAPTCHA_API_KEY='test-api-key',
     )
@@ -186,11 +179,12 @@ class FrcCaptchaFieldTest(TestCase):
 
     @patch('friendly_captcha.fields.requests.post')
     @override_settings(
-        FRC_CAPTCHA_SECRET='test-secret',  # noqa: S106 Possible hardcoded password
+        FRC_CAPTCHA_VERSION=2,
+        FRC_CAPTCHA_API_KEY='test-api-key',
         FRC_CAPTCHA_SITE_KEY='test-site-key',
-        FRC_CAPTCHA_VERIFICATION_URL='http://test-url.com'
+        FRC_CAPTCHA_ENDPOINT='eu',
     )
-    def test_clean_verification_success(self, mock_post):
+    def test_clean_verification_success_v2_eu_endpoint(self, mock_post):
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.json.return_value = {'success': True}
@@ -200,15 +194,16 @@ class FrcCaptchaFieldTest(TestCase):
         result = field.clean('some-value')
         self.assertTrue(result)
         mock_post.assert_called_once()
-        self.assertEqual(mock_post.call_args.kwargs['data']['solution'], 'some-value')
-        self.assertEqual(mock_post.call_args.kwargs['data']['secret'], 'test-secret')
+        self.assertEqual(mock_post.call_args.args[0], 'https://eu.frcapi.com/api/v2/captcha/siteverify')
+        self.assertEqual(mock_post.call_args.kwargs['data']['response'], 'some-value')
         self.assertEqual(mock_post.call_args.kwargs['data']['sitekey'], 'test-site-key')
+        self.assertEqual(mock_post.call_args.kwargs['headers']['X-API-Key'], 'test-api-key')
 
     @patch('friendly_captcha.fields.requests.post')
     @override_settings(
+        FRC_CAPTCHA_VERSION=2,
         FRC_CAPTCHA_API_KEY='test-api-key',
         FRC_CAPTCHA_SITE_KEY='test-site-key',
-        FRC_CAPTCHA_VERIFICATION_URL='https://global.frcapi.com/api/v2/captcha/siteverify'
     )
     def test_clean_v2_verification_fail(self, mock_post):
         mock_response = MagicMock()
@@ -225,9 +220,9 @@ class FrcCaptchaFieldTest(TestCase):
 
     @patch('friendly_captcha.fields.requests.post')
     @override_settings(
-        FRC_CAPTCHA_SECRET='test-secret',  # noqa: S106 Possible hardcoded password
+        FRC_CAPTCHA_VERSION=2,
+        FRC_CAPTCHA_API_KEY='test-api-key',
         FRC_CAPTCHA_SITE_KEY='test-site-key',
-        FRC_CAPTCHA_VERIFICATION_URL='http://test-url.com'
     )
     def test_clean_verification_fail_not_200(self, mock_post):
         mock_response = MagicMock()
@@ -239,50 +234,20 @@ class FrcCaptchaFieldTest(TestCase):
         with pytest.raises(ValidationError):
             field.clean('some-value')
 
-    @patch('friendly_captcha.fields.requests.post')
     @override_settings(
-        FRC_CAPTCHA_API_KEY='test-api-key',
+        FRC_CAPTCHA_VERSION=2,
         FRC_CAPTCHA_SITE_KEY='test-site-key',
-        FRC_CAPTCHA_VERIFICATION_URL='https://global.frcapi.com/api/v2/captcha/siteverify',
-    )
-    def test_clean_verification_success_v2(self, mock_post):
-        mock_response = MagicMock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {'success': True}
-        mock_post.return_value = mock_response
-
-        field = FrcCaptchaField()
-        result = field.clean('some-value')
-        self.assertTrue(result)
-        mock_post.assert_called_once()
-        self.assertEqual(mock_post.call_args.kwargs['data']['response'], 'some-value')
-        self.assertEqual(mock_post.call_args.kwargs['data']['sitekey'], 'test-site-key')
-        self.assertEqual(mock_post.call_args.kwargs['headers']['X-API-Key'], 'test-api-key')
-
-    @override_settings(
-        FRC_CAPTCHA_SITE_KEY='test-site-key',
-        FRC_CAPTCHA_VERIFICATION_URL='https://global.frcapi.com/api/v2/captcha/siteverify',
     )
     def test_clean_v2_requires_api_key(self):
         field = FrcCaptchaField()
         with pytest.raises(ValidationError):
             field.clean('some-value')
 
-    @patch('friendly_captcha.fields.requests.post')
     @override_settings(
-        FRC_CAPTCHA_API_KEY='test-api-key',
-        FRC_CAPTCHA_VERIFICATION_URL='https://global.frcapi.com/api/v2/captcha/siteverify',
-    )
-    def test_clean_verification_success_v2_without_sitekey(self, mock_post):
-        mock_response = MagicMock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {'success': True}
-        mock_post.return_value = mock_response
-
+    FRC_CAPTCHA_VERSION=2,
+    FRC_CAPTCHA_API_KEY='test-api-key',
+)
+    def test_clean_verification_requires_sitekey_v2(self):
         field = FrcCaptchaField()
-        result = field.clean('some-value')
-        self.assertTrue(result)
-        mock_post.assert_called_once()
-        self.assertEqual(mock_post.call_args.kwargs['data']['response'], 'some-value')
-        self.assertNotIn('sitekey', mock_post.call_args.kwargs['data'])
-        self.assertEqual(mock_post.call_args.kwargs['headers']['X-API-Key'], 'test-api-key')
+        with pytest.raises(ValidationError):
+            field.clean('some-value')
