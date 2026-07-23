@@ -8,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 
 from friendly_captcha.utils import (
     get_captcha_version,
-    get_verification_headers,
     get_verification_payload,
     get_verification_url,
 )
@@ -35,22 +34,17 @@ class FrcCaptchaField(forms.CharField):
         captcha_sitekey = getattr(settings, 'FRC_CAPTCHA_SITE_KEY', None)
         captcha_verification_url = get_verification_url()
         captcha_version = get_captcha_version()
-        captcha_secret = getattr(settings, 'FRC_CAPTCHA_SECRET', None)
         captcha_api_key = getattr(settings, 'FRC_CAPTCHA_API_KEY', None)
-        if captcha_version == 2:
-            captcha_ready = bool(captcha_verification_url and captcha_api_key)
-        else:
-            captcha_ready = bool(captcha_sitekey and captcha_secret and captcha_verification_url)
+       
+        captcha_ready = bool(captcha_sitekey and captcha_api_key and captcha_verification_url)
 
         if captcha_ready:
             payload = get_verification_payload(value)
+            payload['sitekey'] = captcha_sitekey
             if captcha_version == 2:
-                if captcha_sitekey:
-                    payload['sitekey'] = captcha_sitekey
-                headers = get_verification_headers()
+                headers = {'X-API-Key': captcha_api_key}
             else:
-                payload['secret'] = captcha_secret
-                payload['sitekey'] = captcha_sitekey
+                payload['secret'] = captcha_api_key
                 headers = {}
 
             captcha_response = requests.post(
@@ -65,8 +59,10 @@ class FrcCaptchaField(forms.CharField):
                     logger.info('Captcha failed validation %s', validation)
                 else:
                     logger.info('Captcha validation success')
-                    clean_value = True
+                    clean_value = True                
+
             else:  # Unverified response
+                logger.info('Captcha failed validation (code %s) %s', captcha_response.status_code, captcha_response.text)
                 accept_unverified = getattr(settings, 'FRC_CAPTCHA_ACCEPT_UNVERIFIED', False)
                 if accept_unverified:
                     logger.info(
