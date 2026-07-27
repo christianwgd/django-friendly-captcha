@@ -41,9 +41,15 @@ def get_verification_url():
             return V2_VERIFICATION_URL_EU
         return V2_VERIFICATION_URL
     else:
-        if get_captcha_endpoint() == 'eu':
+        if get_captcha_endpoint() == V1_WIDGET_ENDPOINT_EU:
             return V1_VERIFICATION_URL_EU
         return V1_VERIFICATION_URL
+
+def get_api_key():
+    captcha_api_key = getattr(settings, 'FRC_CAPTCHA_API_KEY', None)
+    if captcha_api_key is None:
+        captcha_api_key = getattr(settings, 'FRC_CAPTCHA_SECRET', None)
+    return captcha_api_key
 
 def get_start_mode():
     configured_start_mode = getattr(settings, 'FRC_CAPTCHA_START_MODE', None)

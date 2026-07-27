@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from friendly_captcha.utils import (
     get_captcha_version,
+    get_api_key,
     get_verification_payload,
     get_verification_url,
 )
@@ -34,7 +35,7 @@ class FrcCaptchaField(forms.CharField):
         captcha_sitekey = getattr(settings, 'FRC_CAPTCHA_SITE_KEY', None)
         captcha_verification_url = get_verification_url()
         captcha_version = get_captcha_version()
-        captcha_api_key = getattr(settings, 'FRC_CAPTCHA_API_KEY', None)
+        captcha_api_key = get_api_key()
        
         captcha_ready = bool(captcha_sitekey and captcha_api_key and captcha_verification_url)
 
