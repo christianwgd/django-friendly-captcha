@@ -95,8 +95,9 @@ is handled automatically.
 
 ### v2
 
-Instead of a secret you now get a now get an API-Key with your
-registration:
+Instead of a secret you now get new API-Key with your registration. If 
+you're already registered reach out to the friendly-captcha Website to 
+get your API-Key.
 
 ``` 
 FRC_CAPTCHA_VERSION = 'v2'
