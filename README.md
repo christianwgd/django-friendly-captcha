@@ -74,10 +74,15 @@ the captcha form field.
 
 ## Configuration
 
+>[!NOTE] 
+>FRC_CAPTCHA_VERSION defaults to \'v1\', so if you omit this setting or
+set to None v1 is used. There's no need to take any action if you stick 
+to version 1.
+
 ### v1
 
 Register to Friendly Captcha at <https://friendlycaptcha.com/signup> to
-get your sitekey and captcha secret.
+get your site key and captcha secret.
 
 ``` 
 FRC_CAPTCHA_VERSION = 'v1'
@@ -85,7 +90,7 @@ FRC_CAPTCHA_SECRET = '<yourCaptchaSecret'
 FRC_CAPTCHA_SITE_KEY = '<yourCaptchaSiteKey>'
 ```
 
-There\'s no need to specif the captcha verification URL any more, this
+There\'s no need to specif the captcha verification URL anymore, this
 is handled automatically.
 
 ### v2
@@ -99,11 +104,8 @@ FRC_CAPTCHA_API_KEY = '<yourCaptchaApiKey'
 FRC_CAPTCHA_SITE_KEY = '<yourCaptchaSiteKey>'
 ```
 
-FRC_CAPTCHA_VERSION defaults to \'v1\', so if you omit this setting or
-set to None v1 is used.
-
 There\'s also a new setting to specify the endpoint region (\"EU\" or
-\"global\"). Please note that you might have a special payed plan to
+\"global\"). Please note that you need to have a special plan to
 choose a special endpoint. (See the [friendly captcha
 docs](https://friendlycaptcha.com) for more information).
 
