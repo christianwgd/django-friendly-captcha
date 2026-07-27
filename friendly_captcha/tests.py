@@ -7,8 +7,10 @@ from friendly_captcha.utils import (
     get_captcha_endpoint,
     get_captcha_version,
     get_start_mode,
+    get_api_key,
     get_verification_url,
     get_widget_script_urls,
+    get_verification_payload,
 )
 from friendly_captcha.fields import FrcCaptchaField
 from friendly_captcha.widgets import FrcCaptchaWidget
@@ -44,16 +46,28 @@ class FrcCaptchaUtilsTest(TestCase):
         self.assertEqual(get_captcha_version(), 2)
 
     @override_settings()
-    def test_get_captcha_endpoint_default(self):
+    def test_get_captcha_endpoint_default(self):  # v1, global
         self.assertEqual(get_captcha_endpoint(), 'https://api.friendlycaptcha.com/api/v1/puzzle')
+
+    @override_settings(FRC_CAPTCHA_VERSION=1, FRC_CAPTCHA_ENDPOINT='eu')
+    def test_get_captcha_endpoint_v1_eu(self):
+        self.assertEqual(get_captcha_endpoint(), 'https://eu-api.friendlycaptcha.eu/api/v1/puzzle')
 
     @override_settings(FRC_CAPTCHA_VERSION=2, FRC_CAPTCHA_ENDPOINT='eu')
     def test_get_captcha_endpoint_eu(self):
         self.assertEqual(get_captcha_endpoint(), 'eu')
 
+    @override_settings(FRC_CAPTCHA_VERSION=2, FRC_CAPTCHA_ENDPOINT='global')
+    def test_get_captcha_endpoint_global(self):
+        self.assertEqual(get_captcha_endpoint(), 'global')
+
     @override_settings()
-    def test_get_verification_url_default(self):
+    def test_get_verification_url_default(self):  # v1, global
         self.assertEqual(get_verification_url(), 'https://api.friendlycaptcha.com/api/v1/siteverify')
+
+    @override_settings(FRC_CAPTCHA_VERSION=1, FRC_CAPTCHA_ENDPOINT='eu')
+    def test_get_verification_url_v1_eu(self):
+        self.assertEqual(get_verification_url(), 'https://eu-api.friendlycaptcha.eu/api/v1/siteverify')
 
     @override_settings(FRC_CAPTCHA_VERSION=2)
     def test_get_verification_url_v2(self):
@@ -70,6 +84,14 @@ class FrcCaptchaUtilsTest(TestCase):
     @override_settings(FRC_CAPTCHA_START_MODE='none')
     def test_get_start_mode_none(self):
         self.assertEqual(get_start_mode(), 'none')
+
+    @override_settings(FRC_CAPTCHA_API_KEY='some-api-key')
+    def test_get_api_key_default_v2(self):
+        self.assertEqual(get_api_key(), 'some-api-key')
+
+    @override_settings(FRC_CAPTCHA_API_KEY=None, FRC_CAPTCHA_SECRET='some-secret')
+    def test_get_api_key_default_v1(self):
+        self.assertEqual(get_api_key(), 'some-secret')
 
     @override_settings()
     def test_widget_script_urls_default(self):
@@ -102,6 +124,19 @@ class FrcCaptchaUtilsTest(TestCase):
                 'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.min.js',
                 'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js'
             )
+        )
+
+    def test_get_verification_payload_default(self):
+        self.assertEqual(
+            get_verification_payload(value='some-response'),
+            {'solution': 'some-response'}
+        )
+
+    @override_settings(FRC_CAPTCHA_VERSION=2)
+    def test_get_verification_payload_v2(self):
+        self.assertEqual(
+            get_verification_payload(value='some-response'),
+            {'response': 'some-response'}
         )
 
 
@@ -176,6 +211,28 @@ class FrcCaptchaFieldTest(TestCase):
         field = FrcCaptchaField()
         result = field.clean('some-value')
         self.assertTrue(result)
+
+    @patch('friendly_captcha.fields.requests.post')
+    @override_settings(
+        FRC_CAPTCHA_VERSION=1,
+        FRC_CAPTCHA_SECRET='test-secret',
+        FRC_CAPTCHA_SITE_KEY='test-site-key',
+        FRC_CAPTCHA_ENDPOINT='eu',
+    )
+    def test_clean_verification_success_v1_eu_endpoint(self, mock_post):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {'success': True}
+        mock_post.return_value = mock_response
+
+        field = FrcCaptchaField()
+        result = field.clean('some-value')
+        self.assertTrue(result)
+        mock_post.assert_called_once()
+        self.assertEqual(mock_post.call_args.args[0], 'https://eu-api.friendlycaptcha.eu/api/v1/siteverify')
+        self.assertEqual(mock_post.call_args.kwargs['data']['solution'], 'some-value')
+        self.assertEqual(mock_post.call_args.kwargs['data']['sitekey'], 'test-site-key')
+        self.assertEqual(mock_post.call_args.kwargs['data']['secret'], 'test-secret')
 
     @patch('friendly_captcha.fields.requests.post')
     @override_settings(
