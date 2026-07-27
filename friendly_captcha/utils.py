@@ -24,26 +24,22 @@ def get_captcha_version():
 
 def get_captcha_endpoint():
     configured_endpoint = getattr(settings, 'FRC_CAPTCHA_ENDPOINT', None)
-    if get_captcha_version() == 2: 
+    if get_captcha_version() == 2:
         if configured_endpoint == 'eu':
             return configured_endpoint
-        else: 
-            return 'global'
-    else: 
-        if configured_endpoint == 'eu':
-            return V1_WIDGET_ENDPOINT_EU
-        else:
-            return V1_WIDGET_ENDPOINT_GLOBAL
+        return 'global'
+    if configured_endpoint == 'eu':
+        return V1_WIDGET_ENDPOINT_EU
+    return V1_WIDGET_ENDPOINT_GLOBAL
 
 def get_verification_url():
     if get_captcha_version() == 2:
         if get_captcha_endpoint() == 'eu':
             return V2_VERIFICATION_URL_EU
         return V2_VERIFICATION_URL
-    else:
-        if get_captcha_endpoint() == V1_WIDGET_ENDPOINT_EU:
-            return V1_VERIFICATION_URL_EU
-        return V1_VERIFICATION_URL
+    if get_captcha_endpoint() == V1_WIDGET_ENDPOINT_EU:
+        return V1_VERIFICATION_URL_EU
+    return V1_VERIFICATION_URL
 
 def get_api_key():
     captcha_api_key = getattr(settings, 'FRC_CAPTCHA_API_KEY', None)

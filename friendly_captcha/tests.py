@@ -89,7 +89,10 @@ class FrcCaptchaUtilsTest(TestCase):
     def test_get_api_key_default_v2(self):
         self.assertEqual(get_api_key(), 'some-api-key')
 
-    @override_settings(FRC_CAPTCHA_API_KEY=None, FRC_CAPTCHA_SECRET='some-secret')
+    @override_settings(
+        FRC_CAPTCHA_API_KEY=None,
+        FRC_CAPTCHA_SECRET='some-secret'  # noqa: S106
+    )
     def test_get_api_key_default_v1(self):
         self.assertEqual(get_api_key(), 'some-secret')
 
@@ -215,7 +218,7 @@ class FrcCaptchaFieldTest(TestCase):
     @patch('friendly_captcha.fields.requests.post')
     @override_settings(
         FRC_CAPTCHA_VERSION=1,
-        FRC_CAPTCHA_SECRET='test-secret',
+        FRC_CAPTCHA_SECRET='test-secret',  # noqa: S106
         FRC_CAPTCHA_SITE_KEY='test-site-key',
         FRC_CAPTCHA_ENDPOINT='eu',
     )
