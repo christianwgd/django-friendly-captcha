@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.2.1 (2026-07-30)
+
+- Fixed: Widget attrs were not propagated properly
+- Fixed: Removed invalid sections from README
+
 ## Version 0.2.0 (2026-07-17)
 
 - New: Friendly-Captcha Version 2 compatability
