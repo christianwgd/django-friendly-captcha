@@ -116,29 +116,6 @@ FRC_CAPTCHA_ENDPOINT = 'eu | global'
 
 The setting defaults to \'global\'.
 
-For Friendly Captcha v2, the backend verification uses an API key. The
-old [secret]{.title-ref} field is no longer used for v2 verification.
-Point the verification URL at the v2 endpoint:
-
-``` 
-FRC_CAPTCHA_API_KEY = '<yourCaptchaApiKey>'
-FRC_CAPTCHA_VERIFICATION_URL = 'https://global.frcapi.com/api/v2/captcha/siteverify'
-```
-
-You can also set the version explicitly:
-
-``` 
-FRC_CAPTCHA_VERSION = 2
-```
-
-If [FRC_CAPTCHA_VERSION]{.title-ref} is omitted, the package switches to
-v2 automatically when it sees a v2 verification URL or an API key.
-
-The Risk Intelligence feature mentioned in the v2 docs is separate from
-captcha verification. It adds extra risk data to the successful
-siteverify response when enabled, but it does not replace the API key
-needed for backend verification.
-
 In default the form will fail with an error (\'Captcha test failed\').
 You can change this behaviour by setting FRC_CAPTCHA_FAIL_SILENT to
 True.
