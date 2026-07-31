@@ -1,8 +1,13 @@
 # Change Log
 
+## Version 0.2.3 (2026-07-31)
+
+- Fixed: Documentation how to specify version in settings
+- Fixed: Final create of attrs not working
+
 ## Version 0.2.2 (2026-07-31)
 
-- Updated: Minor code optimization, no need to update
+invalid
 
 ## Version 0.2.1 (2026-07-30)
 
