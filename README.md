@@ -85,7 +85,7 @@ Register to Friendly Captcha at <https://friendlycaptcha.com/signup> to
 get your site key and captcha secret.
 
 ``` 
-FRC_CAPTCHA_VERSION = 'v1'
+FRC_CAPTCHA_VERSION = 1  # or '1'
 FRC_CAPTCHA_SECRET = '<yourCaptchaSecret'
 FRC_CAPTCHA_SITE_KEY = '<yourCaptchaSiteKey>'
 ```
@@ -100,7 +100,7 @@ you're already registered reach out to the friendly-captcha Website to
 get your API-Key.
 
 ``` 
-FRC_CAPTCHA_VERSION = 'v2'
+FRC_CAPTCHA_VERSION = 2  # or '2'
 FRC_CAPTCHA_API_KEY = '<yourCaptchaApiKey'
 FRC_CAPTCHA_SITE_KEY = '<yourCaptchaSiteKey>'
 ```
