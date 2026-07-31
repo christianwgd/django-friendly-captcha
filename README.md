@@ -75,8 +75,8 @@ the captcha form field.
 ## Configuration
 
 >[!NOTE] 
->FRC_CAPTCHA_VERSION defaults to \'v1\', so if you omit this setting or
-set to None v1 is used. There's no need to take any action if you stick 
+>FRC_CAPTCHA_VERSION defaults to \'1\', so if you omit this setting or
+set to None, v1 is used. There's no need to take any action if you stick 
 to version 1.
 
 ### v1
