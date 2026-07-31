@@ -23,24 +23,20 @@ class FrcCaptchaWidget(Widget):
         self.frc_widget_module_js, self.frc_widget_js = get_widget_script_urls()
 
     def render(self, name, value, attrs=None, renderer=None):
-        if attrs is None:
-            attrs = {}
-        if self.attrs:
-            attrs = {**self.attrs, **attrs}  # <-- constructor attrs come in HERE
         if self.site_key is not None:
-            attrs['data-sitekey'] = self.site_key
-        attrs.setdefault('data-start', get_start_mode())
-        attrs[get_widget_language_attr()] = translation.get_language()
+            self.attrs['data-sitekey'] = self.site_key
+        self.attrs.setdefault('data-start', get_start_mode())
+        self.attrs[get_widget_language_attr()] = translation.get_language()
         if get_captcha_version() == 2:
-            attrs['data-api-endpoint'] = get_captcha_endpoint()
+            self.attrs['data-api-endpoint'] = get_captcha_endpoint()
         else:
-            attrs['data-puzzle-endpoint'] = get_captcha_endpoint()
-        attrs[get_widget_field_name_attr()] = name
-        attrs['class'] = 'frc-captcha'
-        final_attrs = self.build_attrs(attrs)
+            self.attrs['data-puzzle-endpoint'] = get_captcha_endpoint()
+        self.attrs[get_widget_field_name_attr()] = name
+        self.attrs['class'] = 'frc-captcha'
+        final_attrs = self.build_attrs(self.attrs, attrs)
         frc_widget_module_js, self.frc_widget_js = get_widget_script_urls()
         frc_js = mark_safe(
             f'<script type="module" src="{frc_widget_module_js}" async defer></script>'
             f'<script nomodule src="{self.frc_widget_js}" async defer></script>'
         )
-        return format_html('<div {}></div>{}', flatatt(final_attrs), mark_safe(frc_js))
+        return format_html('<div {}></div>{}', flatatt(final_attrs), frc_js)

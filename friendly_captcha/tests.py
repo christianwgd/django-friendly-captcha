@@ -144,6 +144,19 @@ class FrcCaptchaUtilsTest(TestCase):
 
 
 class FrcCaptchaWidgetTest(TestCase):
+
+    @override_settings(FRC_CAPTCHA_SITE_KEY='test-site-key', LANGUAGE_CODE='en')
+    def test_render_no_attrs(self):
+        widget = FrcCaptchaWidget()
+        # This should not raise TypeError
+        html = widget.render('captcha-field', None, attrs={})
+        self.assertIn('class="frc-captcha"', html)
+        self.assertIn('data-sitekey="test-site-key"', html)
+        self.assertIn('data-lang="en"', html)
+        self.assertIn('data-solution-field-name="captcha-field"', html)
+        self.assertIn('type="module"', html)
+        self.assertIn('<script nomodule', html)
+
     @override_settings(FRC_CAPTCHA_SITE_KEY='test-site-key', LANGUAGE_CODE='en')
     def test_render(self):
         widget = FrcCaptchaWidget(attrs={'data-test': 'test'})
@@ -158,28 +171,16 @@ class FrcCaptchaWidgetTest(TestCase):
         self.assertIn('data-test="test"', html)
 
     @override_settings(FRC_CAPTCHA_SITE_KEY='test-site-key', LANGUAGE_CODE='en')
-    def test_render_data_start_mode_focus(self):
+    def test_render_data_theme_attr(self):
         widget = FrcCaptchaWidget(attrs={'data-theme': 'dark'})
         html = widget.render('captcha-field', None)
-        self.assertIn('class="frc-captcha"', html)
-        self.assertIn('data-sitekey="test-site-key"', html)
-        self.assertIn('data-solution-field-name="captcha-field"', html)
-        self.assertIn('data-lang="en"', html)
-        self.assertIn('<script type="module"', html)
-        self.assertIn('<script nomodule', html)
         self.assertIn('data-theme="dark"', html)
 
     @override_settings(FRC_CAPTCHA_SITE_KEY='test-site-key', LANGUAGE_CODE='en')
-    def test_render_no_attrs(self):
-        widget = FrcCaptchaWidget()
-        # This should not raise TypeError
+    def test_render_override_start_mode(self):
+        widget = FrcCaptchaWidget(attrs={'data-start': 'auto'})
         html = widget.render('captcha-field', None, attrs={})
-        self.assertIn('class="frc-captcha"', html)
-        self.assertIn('data-sitekey="test-site-key"', html)
-        self.assertIn('data-lang="en"', html)
-        self.assertIn('data-solution-field-name="captcha-field"', html)
-        self.assertIn('type="module"', html)
-        self.assertIn('<script nomodule', html)
+        self.assertIn('data-start="auto"', html)
 
 
 class FrcCaptchaWidgetV2Test(TestCase):
