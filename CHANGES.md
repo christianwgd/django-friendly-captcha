@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 0.2.2 (2026-07-31)
+
+-- Updated: Minor code optimization, no need to update
+
 ## Version 0.2.1 (2026-07-30)
 
 - Fixed: Widget attrs were not propagated properly
