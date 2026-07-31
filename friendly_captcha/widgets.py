@@ -33,7 +33,7 @@ class FrcCaptchaWidget(Widget):
             self.attrs['data-puzzle-endpoint'] = get_captcha_endpoint()
         self.attrs[get_widget_field_name_attr()] = name
         self.attrs['class'] = 'frc-captcha'
-        final_attrs = self.build_attrs(self.attrs, attrs)
+        final_attrs = self.build_attrs(self.attrs)
         frc_widget_module_js, self.frc_widget_js = get_widget_script_urls()
         frc_js = mark_safe(
             f'<script type="module" src="{frc_widget_module_js}" async defer></script>'
