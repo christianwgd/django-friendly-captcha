@@ -1,9 +1,10 @@
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()  # noqa: PTH118,PTH120, PTH123
 
 
 setup(
@@ -23,7 +24,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'django',
-        'requests'
+        'requests',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

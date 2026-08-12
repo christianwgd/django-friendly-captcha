@@ -7,8 +7,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from friendly_captcha.utils import (
-    get_captcha_version,
     get_api_key,
+    get_captcha_version,
     get_verification_payload,
     get_verification_url,
 )
@@ -22,7 +22,7 @@ class FrcCaptchaField(forms.CharField):
     widget = FrcCaptchaWidget
 
     def __init__(self, *args, **kwargs):
-        super(FrcCaptchaField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean(self, value):
         # Mock the response of verification for testing purposes
@@ -65,13 +65,13 @@ class FrcCaptchaField(forms.CharField):
             else:  # Unverified response
                 logger.info(
                     'Captcha failed validation (code %s) %s',
-                    captcha_response.status_code, captcha_response.text
+                    captcha_response.status_code, captcha_response.text,
                 )
                 accept_unverified = getattr(settings, 'FRC_CAPTCHA_ACCEPT_UNVERIFIED', False)
                 if accept_unverified:
                     logger.info(
                         'Captcha could not be verified, accepting unverified response (code %s) %s',
-                        captcha_response.status_code, captcha_response.text
+                        captcha_response.status_code, captcha_response.text,
                     )
                     clean_value = True
 

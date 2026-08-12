@@ -1,17 +1,17 @@
 from django.conf import settings
 from django.forms import Widget
+from django.forms.utils import flatatt
 from django.utils import translation
 from django.utils.html import format_html
-from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
 
 from friendly_captcha.utils import (
+    get_captcha_endpoint,
+    get_captcha_version,
+    get_start_mode,
     get_widget_field_name_attr,
     get_widget_language_attr,
     get_widget_script_urls,
-    get_captcha_version,
-    get_captcha_endpoint,
-    get_start_mode
 )
 
 
@@ -37,6 +37,6 @@ class FrcCaptchaWidget(Widget):
         frc_widget_module_js, self.frc_widget_js = get_widget_script_urls()
         frc_js = mark_safe(
             f'<script type="module" src="{frc_widget_module_js}" async defer></script>'
-            f'<script nomodule src="{self.frc_widget_js}" async defer></script>'
+            f'<script nomodule src="{self.frc_widget_js}" async defer></script>',
         )
         return format_html('<div {}></div>{}', flatatt(final_attrs), frc_js)

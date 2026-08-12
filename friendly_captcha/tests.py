@@ -1,28 +1,29 @@
+from unittest.mock import MagicMock, patch
+
 import django
 import pytest
-from django.test import TestCase, override_settings
+from django.conf import settings
 from django.core.exceptions import ValidationError
-from unittest.mock import patch, MagicMock
+from django.test import TestCase, override_settings
+
+from friendly_captcha.fields import FrcCaptchaField
 from friendly_captcha.utils import (
+    get_api_key,
     get_captcha_endpoint,
     get_captcha_version,
     get_start_mode,
-    get_api_key,
+    get_verification_payload,
     get_verification_url,
     get_widget_script_urls,
-    get_verification_payload,
 )
-from friendly_captcha.fields import FrcCaptchaField
 from friendly_captcha.widgets import FrcCaptchaWidget
-from django.conf import settings
-
 
 settings.configure(
     DATABASES={
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': ':memory:',
-        }
+        },
     },
     INSTALLED_APPS=[
         'friendly_captcha',
@@ -91,7 +92,7 @@ class FrcCaptchaUtilsTest(TestCase):
 
     @override_settings(
         FRC_CAPTCHA_API_KEY=None,
-        FRC_CAPTCHA_SECRET='some-secret'  # noqa: S106
+        FRC_CAPTCHA_SECRET='some-secret',  # noqa: S106
     )
     def test_get_api_key_default_v1(self):
         self.assertEqual(get_api_key(), 'some-secret')
@@ -102,8 +103,8 @@ class FrcCaptchaUtilsTest(TestCase):
             get_widget_script_urls(),
             (
                 'https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.20/widget.module.min.js',
-                'https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.20/widget.min.js'
-            )
+                'https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.20/widget.min.js',
+            ),
         )
 
     @override_settings(
@@ -115,8 +116,8 @@ class FrcCaptchaUtilsTest(TestCase):
             get_widget_script_urls(),
             (
                 'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.min.js',
-                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js'
-            )
+                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js',
+            ),
         )
 
     @override_settings(FRC_CAPTCHA_VERSION=2)
@@ -125,21 +126,21 @@ class FrcCaptchaUtilsTest(TestCase):
             get_widget_script_urls(),
             (
                 'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.min.js',
-                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js'
-            )
+                'https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk/site.compat.min.js',
+            ),
         )
 
     def test_get_verification_payload_default(self):
         self.assertEqual(
             get_verification_payload(value='some-response'),
-            {'solution': 'some-response'}
+            {'solution': 'some-response'},
         )
 
     @override_settings(FRC_CAPTCHA_VERSION=2)
     def test_get_verification_payload_v2(self):
         self.assertEqual(
             get_verification_payload(value='some-response'),
-            {'response': 'some-response'}
+            {'response': 'some-response'},
         )
 
 

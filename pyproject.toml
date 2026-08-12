@@ -2,38 +2,22 @@
 line-length = 120
 
 [tool.ruff.lint]
-# Enable flake8-bugbear (`B`) rules.
-select = [
-    "E",
-    "F",
-    "B",
-    "PL",
-    "S",
-    "W",
-    "N",
-    "G",
-    "C4",
-    "EM",
-    "ISC",
-    "ICN",
-    "PIE",
-    "T20",
-    "PYI",
-    "PT",
-    "RET",
-    "INT",
-    "RUF",
-]
+select = ["ALL"]
 ignore = [
-    "B905",    # `zip()` without an explicit `strict=` parameter
-    "PT009",   # Use a regular `assert` instead of unittest-style `{assertion}`
-    "S308",    # Use of `mark_safe` may expose cross-site scripting vulnerabilities
+    "ANN",     # we don't annotate
+    "CPY",  # no copyright
+    "D",       # no docstring policy
+    "ARG001",  # unused function argument, `request` in every view
+    "ARG002",  # unused method argument, django hook signatures
+    "DJ001",   # null=True on string fields, deliberate here
+    "DJ012",   # `__str__` and Meta before the fields
+    "ERA001",  # commented out code we keep around as a reference
     "PLR2004", # magic-value-comparison
-    "N813",    # Camelcase `BeautifulSoup` imported as lowercase `bs`
-    "PLR0912", # Too many branches
-    "PLR0915", # Too many statements
+    "PT009",   # Use a regular `assert` instead of unittest-style `{assertion}`
+    "Q000",  # Allow mixed quotes
     "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
-    "PLC0415", # `import` should be at the top-level of a file
+    "S308",    # Use of `mark_safe` may expose cross-site scripting vulnerabilities
+    "SLF001",  # private member access, `_meta` is public API in practice
 ]
 
 # Ignore `E501` (line length) in all `__init__.py`  and migration files
